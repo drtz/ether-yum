@@ -1,0 +1,28 @@
+{
+  "name": "ether-yum-api",
+  "version": "1.0.0",
+  "description": "A simple API for digesting yummy Etherium blockchain info",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drtz/ether-yum.git"
+  },
+  "author": "Danny Raetzsch <danny04@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drtz/ether-yum/issues"
+  },
+  "homepage": "https://github.com/drtz/ether-yum#readme",
+  "dependencies": {
+    "apollo-server": "^3.6.4",
+    "axios": "^0.26.1",
+    "graphql": "^16.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.2"
+  }
+}
