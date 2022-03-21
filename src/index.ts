@@ -30,7 +30,6 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     contract(_, { address }) {
-        console.log('resolver', address);
         return contractService.getContractByAddress(address);
     }
   }

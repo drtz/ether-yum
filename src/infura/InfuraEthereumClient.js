@@ -80,6 +80,7 @@ class InfuraEthereumClient {
     }
 
     async #makeApiRequest(method, params) {
+        console.log(`Making Infura API request: ${method}(${JSON.stringify(params)})`);
         const paramsString = params ? JSON.stringify(params) : '[]';
         const body = InfuraEthereumClient.REQUEST_TEMPLATE(method, paramsString);
         return this.httpClient.post('', body);

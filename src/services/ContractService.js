@@ -6,7 +6,13 @@ class ContractService {
     }
 
     async getContractByAddress(address) {
-        const logs = await this.#findOldestLogs(address, 0, parseInt(await this.infuraClient.getBlockNumber(), 16));
+        const blockNumberString = await this.infuraClient.getBlockNumber();
+        const blockNumber = parseInt(blockNumberString, 16);
+        if (isNaN(blockNumber)) {
+            throw new Error(`Block number ${blockNumberString}`);
+        }
+
+        const logs = await this.#findOldestLogs(address, 0, blockNumber);
 
         if (logs.length == 0) {
             throw new Error('No logs found for specified address');
@@ -31,7 +37,6 @@ class ContractService {
     // The result list will always include the oldest log for the specified address at index 0.
     async #findOldestLogs(address, start, end) {
         try {
-            console.log(`finding logs in range [${start}, ${end}] for address ${address}`);
             return await this.#getLogs(address, start, end);
         } catch (error) {
             if (!(error instanceof InfuraApiError) || error.code != InfuraApiErrorCode.RESULTS_TOO_LARGE) {
@@ -42,19 +47,16 @@ class ContractService {
                 throw new Error('#searchLogs found too many results, but search range cannot be narrowed any further');
             }
 
-            console.log('result set too large, splitting');
             // The result set was too large, do a binary search to find a range small enough to get a result set from Infura
             const midPoint = Math.floor((start + end) / 2);
 
             // Search the two halves. We want the originating transaction, so search the older section first
             const olderLogs = await this.#findOldestLogs(address, start, midPoint);
             if (olderLogs.length > 0) {
-                console.log(`SUCCESS! ${olderLogs.length} logs found in older half`);
                 return olderLogs;
             }
 
             // No logs were found in the older segment, return the newer segment instead
-            console.log('no logs found in older half, searching newer half');
             return this.#findOldestLogs(address, midPoint + 1, end);
         }
     }
