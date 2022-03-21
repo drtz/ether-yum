@@ -9,7 +9,7 @@ class ContractService {
         const blockNumberString = await this.infuraClient.getBlockNumber();
         const blockNumber = parseInt(blockNumberString, 16);
         if (isNaN(blockNumber)) {
-            throw new Error(`Block number ${blockNumberString}`);
+            throw new Error(`Block number ${blockNumberString} is not a valid hex number`);
         }
 
         const logs = await this.#findOldestLogs(address, 0, blockNumber);
@@ -33,8 +33,11 @@ class ContractService {
         }
     }
 
-    // Recursively search for a set of < 10,000 logs for this address block range by doing a binary search.
-    // The result list will always include the oldest log for the specified address at index 0.
+    // To figure out which block & transaction it was created in, we need to find its oldest log. Unfortunately, the
+    // Infura API only returns up to 10,000 logs for a single request and does not provide any paging options.
+    // 
+    // This method executes a binary search for the earliest set of < 10,000 logs for this address block range using
+    // a recursive strategy. The result list will always include the oldest log for the specified address at index 0.
     async #findOldestLogs(address, start, end) {
         try {
             return await this.#getLogs(address, start, end);

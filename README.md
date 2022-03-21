@@ -6,6 +6,8 @@ A simple GraphQL API providing ethereum blockchain data in an easily-to-digest f
 
 This project uses the Infura Mainnet API. To run, you'll need to set up a free Infura project and grab a project ID and project secret at https://infura.io/
 
+Other dependencies:
+
 - Node 17
 - npm
 - Infura API project

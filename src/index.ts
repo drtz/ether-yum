@@ -1,6 +1,6 @@
 const { InfuraEthereumClient } = require("./infura/InfuraEthereumClient");
 const { ApolloServer, gql } = require('apollo-server');
-const ContractService = require('./services/ContractService');
+const ContractService = require('./service/ContractService');
 
 const projectId = process.env.INFURA_PROJECT_ID;
 const projectSecret = process.env.INFURA_PROJECT_SECRET;
